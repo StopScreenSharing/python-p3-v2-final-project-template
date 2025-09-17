@@ -1,19 +1,23 @@
 from . import CURSOR, CONN
 
 class Gardener:
+    all = []
+
     def __init__(self, name, phone, id=None):
         self.id = id
         self.name = name
         self.phone = phone
+
+#Class methods
 
     @classmethod
     def create_table(cls):
         CURSOR.execute("""
             CREATE TABLE IF NOT EXISTS gardeners (
                 id INTEGER PRIMARY KEY,
-                       name TEXT NOT NULL,
-                       phone TEXT
-        )
+                name TEXT NOT NULL,
+                phone TEXT
+        );
     """)
         CONN.commit()
     
