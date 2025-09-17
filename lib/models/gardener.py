@@ -33,5 +33,18 @@ class Gardener:
 
     @classmethod
     def get_all(cls):
-        rows = CURSOR.execute("SELECT * FROM gardeners").fetchall()
-        return [cls(row[1], row[2], row[0]) for row in rows]
+        CURSOR.execute("SELECT * FROM gardeners;")
+        rows = CURSOR.fetchall()
+        return [cls(id=row[0], name=row[1], phone=row[2]) for row in rows]
+    
+    @classmethod
+    def find_by_id(cls, id):
+        CURSOR.execute("SELECT * FROM gardeners WHERE id=?;", (id,))
+        row = CURSOR.fetchone()
+        return cls(id=row[0], name=[1], phone=row[2]) if row else None
+    
+    def delete(self):
+        if self.id:
+            CURSOR.execute("DELETE FROM gardeners WHERE id=?;", (self.id,))
+            CONN.commit()
+            print(f"Gardener {self.name} deleted.")

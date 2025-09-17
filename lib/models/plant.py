@@ -28,19 +28,35 @@ class Plant:
 
     @classmethod
     def create(cls, species, height, gardener_id):
-        """Insert a new plant into the database and return a Plant instance"""
         CURSOR.execute("""
             INSERT INTO plants (species, height, gardener_id)
             VALUES (?, ?, ?);
         """, (species, height, gardener_id))
         CONN.commit()
-
         new_id = CURSOR.lastrowid
         return cls(species, height, gardener_id, id = new_id)
 
     @classmethod
     def find_by_species(cls, species):
         return [plant for plant in cls.all if plant.species.lower() == species.lower()]
+    
+    @classmethod
+    def get_all(cls):
+        CURSOR.execute("SELECT * FROM plants;")
+        rows = CURSOR.fetchall()
+        return [cls(id=row[0], species=row[1], height=row[2], gardener_id=row[3]) for row in rows]
+    
+    @classmethod
+    def find_by_id(cls, id):
+        CURSOR.execute("SELECT * FROM plants WHERE id=?;", (id,))
+        row = CURSOR.fetchone()
+        return cls(id=row[0], species=row[1], height=row[2], gardener_id=row[3] if row else None)
+    
+    def delete(self):
+        if self.id:
+            CURSOR.execute("DELETE FROM plants WHERE id=?;", (self.id,))
+            CONN.commit()
+            print(f"plant {self.species} deleted.")
     
     # Properties 
     @property
