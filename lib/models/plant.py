@@ -27,6 +27,18 @@ class Plant:
         CONN.commit()
 
     @classmethod
+    def create(cls, species, height, gardener_id):
+        """Insert a new plant into the database and return a Plant instance"""
+        CURSOR.execute("""
+            INSERT INTO plants (species, height, gardener_id)
+            VALUES (?, ?, ?);
+        """, (species, height, gardener_id))
+        CONN.commit()
+
+        new_id = CURSOR.lastrowid
+        return cls(species, height, gardener_id, id = new_id)
+
+    @classmethod
     def find_by_species(cls, species):
         return [plant for plant in cls.all if plant.species.lower() == species.lower()]
     

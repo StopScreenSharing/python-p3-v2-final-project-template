@@ -23,9 +23,13 @@ class Gardener:
     
     @classmethod
     def create(cls, name, phone):
-        CURSOR.execute("INSERT INTO gardeners (name, phone) VALUES (?, ?)", (name, phone))
+        CURSOR.execute("""
+            INSERT INTO gardeners (name, phone)
+            VALUES (?, ?);
+        """, (name, phone))
         CONN.commit()
-        return cls(name, phone, CURSOR.lastrowid)
+        new_id = CURSOR.lastrowid
+        return cls(name, phone, id=new_id)
 
     @classmethod
     def get_all(cls):
