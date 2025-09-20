@@ -22,10 +22,67 @@ def gardener_menu():
         if choice == "1":
             gardeners = Gardener.get_all()
             if gardeners:
-                for g in gardeners:
-                    print(g)
+                for i, g in enumerate(gardeners, start=1):
+                    print(f"{i}. {g.name} ({g.phone})")
             else:
                 print("No gardeners found.")
+
+        elif choice == "2":
+            name = input("Enter gardener name: ").strip()
+            phone = input("Enter gardener phone number: ").strip()
+            try:
+                gardener = Gardener.create(name, phone)
+                print(f"Gardener added: {gardener}")
+            except Exception as e:
+                print(f"Error: {e}")
+
+        elif choice == "3":
+            gardeners = Gardener.get_all()
+            if not gardeners:
+                print("No gardeners to update.")
+                continue
+            for i, g in enumerate(gardeners, start=1):
+                print(f"{i}. {g.name} ({g.phone})")
+            
+            selection = input("Choose a gardener to update: ").strip()
+            if not selection.isdigit() or not (1 <= int(selection) <= len(gardeners)):
+                print("Invalid selection")
+                continue
+
+            gardener = gardeners[int(selection) - 1]
+
+            name = input(f"Enter a new name (leave blank to keep {gardener.name}): ").strip()
+            phone = input(f"Enter a new phone number (Leave blank to keep {gardener.phone}): ").strip()
+
+            try: 
+                if name:
+                    gardener.name = name
+                if phone: 
+                    gardener.phone = phone
+                print(f"Updated gardener {gardener}")
+            except Exception as e:
+                print(f"Error: {e}")
+        elif choice == "4":
+            gardeners = Gardener.get_all()
+            if not gardeners:
+                print("No gardeners to delete.")
+                continue
+
+            for i, g in enumerate(gardeners, start=1):
+                print (f"{i}. {g.name} ({g.phone})")
+            
+            selection = input("Choose a gardener number to delete: ").strip()
+            if not selection.isdigit() or not (1 <= int(selection) <= len(gardeners)):
+                print("Invalid selection.")
+                continue
+
+            gardener = gardeners[int(selection) - 1]
+            gardener.delete()
+        
+        elif choice == "5":
+            break
+        else:
+            print("Invalid choice! Please enter 1-5.")
 
 def plants_menu():
      print("\n🌸 Plant Menu")
