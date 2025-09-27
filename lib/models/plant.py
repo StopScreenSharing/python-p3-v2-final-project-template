@@ -1,102 +1,82 @@
 
-from . import CURSOR, CONN
+from models import CURSOR, CONN
 
 class Plant:
-
-    def __init__(self, species, height, gardener_id, id=None):
+    def __init__(self, name, height, gardener_id, id=None):
         self.id = id
-        self.species = species
-        self.height = height
+        self.name = name
+        self.height = height  
         self.gardener_id = gardener_id
-        
-    
-    # Class Methods
 
-    @classmethod
-    def create_table(cls):
-        CURSOR.execute("""
-            CREATE TABLE IF NOT EXISTS plants (
-                id INTEGER PRIMARY KEY,
-                species TEXT,
-                height INTEGER,
-                gardener_id INTEGER,
-                FOREIGN KEY (gardener_id) REFERENCES gardeners(id)
-            );
-        """)
-        CONN.commit()
-
-    @classmethod
-    def create(cls, species, height, gardener_id):
-        CURSOR.execute("""
-            INSERT INTO plants (species, height, gardener_id)
-            VALUES (?, ?, ?);
-        """, (species, height, gardener_id))
-        CONN.commit()
-        new_id = CURSOR.lastrowid
-        return cls(species, height, gardener_id, id = new_id)
-
-    @classmethod
-    def find_by_species(cls, species):
-        CURSOR.execute("SELECT * FROM plants WHERE LOWER(species)=?;", (species.lower(),))
-        rows = CURSOR.fetchall()
-        return [cls(id=row[0], species=row[1], height=row[2], gardener_id=row[3]) for row in rows]
-      
-    
-    @classmethod
-    def get_all(cls):
-        CURSOR.execute("SELECT * FROM plants;")
-        rows = CURSOR.fetchall()
-        return [cls(id=row[0], species=row[1], height=row[2], gardener_id=row[3]) for row in rows]
-    
-    @classmethod
-    def find_by_id(cls, id):
-        CURSOR.execute("SELECT * FROM plants WHERE id=?;", (id,))
-        row = CURSOR.fetchone()
-        return cls(id=row[0], species=row[1], height=row[2], gardener_id=row[3]) if row else None
-    
-    def delete(self):
-        if self.id:
-            CURSOR.execute("DELETE FROM plants WHERE id=?;", (self.id,))
-            CONN.commit()
-            print(f"plant {self.species} deleted.")
-            self.id = None
-        else:
-            print("This plant is not in the database.")
-    
-    # Properties 
+    # Properties
     @property
-    def species(self):
-        return self._species
-    
-    @species.setter
-    def species(self, value,):
-        if isinstance(value, str) and len(value) > 0:
-            self._species = value
-        else:
-            raise ValueError("Species must not be empty.")
-        
-    @property 
     def height(self):
-        return self._height
-    
+        return f"{self._height} in"
+
     @height.setter
     def height(self, value):
-        if isinstance(value, (int, float)) and value >= 0:
-            self._height = value
+        if not isinstance(value, int):
+            raise ValueError("Height must be an integer.")
+        self._height = value
+
+    # Class methods
+    @classmethod
+    def create_table(cls):
+        sql = """
+        CREATE TABLE IF NOT EXISTS plants (
+            id INTEGER PRIMARY KEY,
+            name TEXT NOT NULL,
+            height INTEGER,
+            gardener_id INTEGER,
+            FOREIGN KEY(gardener_id) REFERENCES gardeners(id)
+        );
+        """
+        CURSOR.execute(sql)
+        CONN.commit()
+
+    @classmethod
+    def drop_table(cls):
+        sql = "DROP TABLE IF EXISTS plants;"
+        CURSOR.execute(sql)
+        CONN.commit()
+
+    # Others
+    def save(self):
+        if self.id:
+            self.update()
         else:
-            raise ValueError("Height must be a non-negative number")
-        
-    @property
-    def gardener(self):
-       from .gardener import Gardener
-       return Gardener.find_by_id(self.gardener_id)
+            sql = "INSERT INTO plants (name, height, gardener_id) VALUES (?, ?, ?);"
+            CURSOR.execute(sql, (self.name, self.height, self.gardener_id))
+            CONN.commit()
+            self.id = CURSOR.lastrowid
 
-    # Instance methods 
+    def update(self):
+        sql = "UPDATE plants SET name = ?, height = ?, gardener_id = ? WHERE id = ?;"
+        CURSOR.execute(sql, (self.name, self.height, self.gardener_id, self.id))
+        CONN.commit()
 
-    def info(self):
-        return f"{self.species} - {self.height} in"
-    
-    def __repr__(self):
-        return f"<Plant {self.id}: {self.species}, {self.height} in, Gardener {self.gardener_id}>"
+    def delete(self):
+        sql = "DELETE FROM plants WHERE id = ?;"
+        CURSOR.execute(sql, (self.id,))
+        CONN.commit()
+
+    @classmethod
+    def get_all(cls):
+        sql = "SELECT * FROM plants;"
+        rows = CURSOR.execute(sql).fetchall()
+        return [cls(id=row[0], name=row[1], height=row[2], gardener_id=row[3]) for row in rows]
+
+    @classmethod
+    def find_by_id(cls, id):
+        sql = "SELECT * FROM plants WHERE id = ?;"
+        row = CURSOR.execute(sql, (id,)).fetchone()
+        return cls(id=row[0], name=row[1], height=row[2], gardener_id=row[3]) if row else None
+
+    @classmethod
+    def find_by_gardener(cls, gardener_id):
+        sql = "SELECT * FROM plants WHERE gardener_id = ?;"
+        rows = CURSOR.execute(sql, (gardener_id,)).fetchall()
+        return [cls(id=row[0], name=row[1], height=row[2], gardener_id=row[3]) for row in rows]
+
     
 
