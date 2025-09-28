@@ -8,10 +8,6 @@ def exit_program():
     exit()
 
 def get_choice(prompt, options):
-    """
-    Repeatedly ask the user for input until they choose a valid option.
-    options: list of strings like ["1", "2", "3"]
-    """
     while True:
         choice = input(prompt).strip()
         if choice in options:
@@ -19,16 +15,13 @@ def get_choice(prompt, options):
         print("Invalid choice, try again.")
 
 def get_int(prompt):
-    """
-    Ask for an integer, re-prompt until valid.
-    """
     while True:
         try:
             return int(input(prompt))
         except ValueError:
             print("Please enter a valid integer.")
 
-# -------------------- GARDENERS --------------------
+# GARDENERS
 
 def list_gardeners():
     gardeners = Gardener.get_all()
@@ -61,7 +54,7 @@ def delete_gardener(gardener):
         gardener.delete()
         print("Gardener deleted.")
 
-# -------------------- PLANTS --------------------
+# PLANTS 
 
 def list_plants(gardener):
     plants = Plant.find_by_gardener(gardener.id)

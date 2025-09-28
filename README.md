@@ -1,5 +1,15 @@
 # Phase 3 CLI+ORM Project Template
 
+## Gardener Management App
+
+This project runs a CLI menu that lets you interact with data related to gardeners. You may list gardenres, update, add, and delete gardeners that persist in the backend. 
+
+When a single gardener is chosen, a list of their plants is displayed as well as the options to add, delete, and update each plant. 
+
+## To Run 
+To run the cli, please go into the lib folder and run cli.py from your terminal.
+Type corresponding Numbers or letters to choose options.
+
 ## Learning Goals
 
 - Discuss the basic directory structure of a CLI.

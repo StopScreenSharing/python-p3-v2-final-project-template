@@ -9,7 +9,7 @@ from helpers import (
 )
 
 Gardener.create_table()
-Plant.create_Table()
+Plant.create_table()
 
 def main_menu():
     while True:

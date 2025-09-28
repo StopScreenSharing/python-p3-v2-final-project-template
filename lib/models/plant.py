@@ -46,13 +46,13 @@ class Plant:
             self.update()
         else:
             sql = "INSERT INTO plants (name, height, gardener_id) VALUES (?, ?, ?);"
-            CURSOR.execute(sql, (self.name, self.height, self.gardener_id))
+            CURSOR.execute(sql, (self.name, self._height, self.gardener_id))
             CONN.commit()
             self.id = CURSOR.lastrowid
 
     def update(self):
         sql = "UPDATE plants SET name = ?, height = ?, gardener_id = ? WHERE id = ?;"
-        CURSOR.execute(sql, (self.name, self.height, self.gardener_id, self.id))
+        CURSOR.execute(sql, (self.name, self._height, self.gardener_id, self.id))
         CONN.commit()
 
     def delete(self):
@@ -64,19 +64,19 @@ class Plant:
     def get_all(cls):
         sql = "SELECT * FROM plants;"
         rows = CURSOR.execute(sql).fetchall()
-        return [cls(id=row[0], name=row[1], height=row[2], gardener_id=row[3]) for row in rows]
+        return [cls(id=row[0], name=row[1], height=int(row[2]) if row[2] is not None else 0, gardener_id=row[3]) for row in rows]
 
     @classmethod
     def find_by_id(cls, id):
         sql = "SELECT * FROM plants WHERE id = ?;"
         row = CURSOR.execute(sql, (id,)).fetchone()
-        return cls(id=row[0], name=row[1], height=row[2], gardener_id=row[3]) if row else None
+        return cls(id=row[0], name=row[1], height=int(row[2]) if row[2] is not None else 0, gardener_id=row[3]) if row else None
 
     @classmethod
     def find_by_gardener(cls, gardener_id):
         sql = "SELECT * FROM plants WHERE gardener_id = ?;"
         rows = CURSOR.execute(sql, (gardener_id,)).fetchall()
-        return [cls(id=row[0], name=row[1], height=row[2], gardener_id=row[3]) for row in rows]
+        return [cls(id=row[0], name=row[1], height=int(row[2]) if row[2] is not None else 0, gardener_id=row[3]) for row in rows]
 
     
 
