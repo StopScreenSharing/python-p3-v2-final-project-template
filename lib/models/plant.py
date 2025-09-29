@@ -77,6 +77,6 @@ class Plant:
         sql = "SELECT * FROM plants WHERE gardener_id = ?;"
         rows = CURSOR.execute(sql, (gardener_id,)).fetchall()
         return [cls(id=row[0], name=row[1], height=int(row[2]) if row[2] is not None else 0, gardener_id=row[3]) for row in rows]
-
     
 
+  
