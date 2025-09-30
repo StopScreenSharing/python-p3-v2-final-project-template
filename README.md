@@ -5,15 +5,28 @@ This project runs a CLI menu that lets you interact with data related to gardene
 
 When a single gardener is chosen, a list of their plants is displayed as well as the options to add, delete, and update each plant. 
 
-## To Run 
-To run the cli, please go into the lib folder and run cli.py from your terminal.
-Type corresponding Numbers or letters to choose options.
+## To Use
+Clone the repository git clone https://github.com/StopScreenSharing/python-p3-v2-final-project-template
+cd to python-p3-v2-final-project-template/lib
+pipenv install
+pipence shell
 
-## gardener.py and plant.py
-The two models of this app. gardeners.py initializes the Gardener class and plant.py initializes the Plant class.
+run python cli.py
+
+from main menu:
+-Manage gardeners(add, update, delete, or select one)
+-Manage plants associated with a gardener
+
+
+
+## cli.py
+File where the cli loop is. Runs through options such as manage gardeners and exit, and then proceeds to other menus based on choices user inputs.
 
 ## helpers.py
 Helper functions to run the CLI 
 
-## cli.py
-File where the cli loop is. Runs through options such as manage gardeners and exit, and then proceeds to other menus based on choices user inputs.
+## gardener.py and plant.py
+The two models of this app. gardeners.py initializes the Gardener class and plant.py initializes the Plant class.
+
+
+
