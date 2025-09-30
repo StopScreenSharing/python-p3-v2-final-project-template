@@ -5,6 +5,7 @@ from models.__init__ import CONN, CURSOR
 from models.gardener import Gardener
 from models.plant import Plant
 
+
 print("Resetting tables...")
 Plant.drop_table()
 Gardener.drop_table()

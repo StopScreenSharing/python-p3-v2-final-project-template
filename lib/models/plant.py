@@ -7,8 +7,17 @@ class Plant:
         self.name = name
         self.height = height  
         self.gardener_id = gardener_id
-
+    
     # Properties
+    @property
+    def name(self):
+        return self._name
+    @name.setter
+    def name(self, value):
+        if not isinstance(value, str) or value == "":
+            raise ValueError("Can't be blank")
+        self._name = value
+
     @property
     def height(self):
         return f"{self._height} in"

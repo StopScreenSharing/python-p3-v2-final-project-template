@@ -8,6 +8,16 @@ class Gardener:
 
     # Properties
     @property
+    def name(self):
+        return self._name
+    
+    @name.setter
+    def name(self, value):
+        if not isinstance(value, str) or value == "":
+            raise ValueError("Can't be blank")
+        self._name = value
+        
+    @property
     def phone(self):
         return self._phone
 

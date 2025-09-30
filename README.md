@@ -17,8 +17,6 @@ from main menu:
 -Manage gardeners(add, update, delete, or select one)
 -Manage plants associated with a gardener
 
-
-
 ## cli.py
 File where the cli loop is. Runs through options such as manage gardeners and exit, and then proceeds to other menus based on choices user inputs.
 

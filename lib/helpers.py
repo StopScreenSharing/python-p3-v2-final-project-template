@@ -34,12 +34,18 @@ def list_gardeners():
     return gardeners
 
 def add_gardener():
-    name = input("Enter gardener name: ").strip()
-    phone = get_int("Enter phone number (integer): ")
-    gardener = Gardener(name, phone)
-    gardener.save()
-    print(f"Added gardener: {name}")
-    return gardener
+    while True:
+        name = input("Enter gardener name: ").strip()
+        phone = get_int("Enter phone number (integer): ")
+
+        try:
+            gardener = Gardener(name, phone)
+            gardener.save()
+            print(f"Added gardener: {name}")
+            return gardener
+        except ValueError:
+            print("Can't be blank \n")
+
 
 def update_gardener(gardener):
     print(f"Updating gardener: {gardener.name}")
@@ -67,12 +73,17 @@ def list_plants(gardener):
     return plants
 
 def add_plant(gardener):
-    name = input("Enter plant name: ").strip()
-    height = get_int("Enter plant height (integer): ")
-    plant = Plant(name, height, gardener.id)
-    plant.save()
-    print(f"Added plant: {name}")
-    return plant
+    while True:
+        name = input("Enter plant name: ").strip()
+        height = get_int("Enter plant height (integer): ")
+        
+        try:
+            plant = Plant(name, height, gardener.id)
+            plant.save()
+            print(f"Added plant: {name}")
+            return plant
+        except ValueError:
+            print("Can't be blank")
 
 def update_plant(plant):
     print(f"Updating plant: {plant.name}")
