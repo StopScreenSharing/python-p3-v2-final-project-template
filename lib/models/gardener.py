@@ -13,9 +13,9 @@ class Gardener:
     
     @name.setter
     def name(self, value):
-        if not isinstance(value, str) or value == "":
-            raise ValueError("Can't be blank")
-        self._name = value
+        if not isinstance(value, str) or value.strip() == "" or value.isdigit():
+            raise ValueError("Please enter a name!")
+        self._name = value.strip()
         
     @property
     def phone(self):

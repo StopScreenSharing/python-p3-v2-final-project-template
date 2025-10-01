@@ -44,7 +44,7 @@ def add_gardener():
             print(f"Added gardener: {name}")
             return gardener
         except ValueError:
-            print("Can't be blank \n")
+            print("Enter a valid name! \n")
 
 
 def update_gardener(gardener):
@@ -83,7 +83,7 @@ def add_plant(gardener):
             print(f"Added plant: {name}")
             return plant
         except ValueError:
-            print("Can't be blank")
+            print("Enter a valid name!")
 
 def update_plant(plant):
     print(f"Updating plant: {plant.name}")

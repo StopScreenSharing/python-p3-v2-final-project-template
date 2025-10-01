@@ -14,9 +14,9 @@ class Plant:
         return self._name
     @name.setter
     def name(self, value):
-        if not isinstance(value, str) or value == "":
-            raise ValueError("Can't be blank")
-        self._name = value
+        if not isinstance(value, str) or value.strip() == "" or value.isdigit():
+            raise ValueError("Enter a valid name!")
+        self._name = value.strip()
 
     @property
     def height(self):
